@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html th:replace="~{general:: layout(~{::main})}">
+    <head>
+        <title>SQL-junailija</title>
+    </head>
+    <body>
+
+        <main class="mdl-layout__content content mdl-grid mdl-grid--no-spacing">
+
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <h2>Add a new exercise to database</h2>
+
+                <p>
+                    Steps to add a new exercise are as follows.
+                </p>
+
+                <ol>
+                    <li>Select a database.</li>
+                    <li>Come up with a (witty) name for your exercise.</li>
+                    <li>Write a handout for the exercise.</li>
+                    <li>Write a model solution for the exercise.</li>
+                    <li>Confirm the exercise and the expected output (output will be shown after you submit the exercise for the first time).</li>
+                </ol>
+
+                <form method="POST" th:action="@{/exercises/add/topics/{topicId}(topicId=${topicId})}" th:object="${exercise}">
+
+                    <div th:if="${#fields.hasErrors('*')}">
+
+                        <div class="mdl-color-text--red-900">
+                            <h3>**Fixes required**</h3>
+                        </div>
+
+                        <p>
+                            There were errors in the exercise that need to be fixed. The errors are as follows:
+                        </p>
+                        <p th:if="${#fields.hasErrors('database')}">Database:</p>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('database')}" th:text="${err}">Errors</li>    
+                        </ul>
+                        <p th:if="${#fields.hasErrors('topic')}">Topic:</p>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('topic')}" th:text="${err}">Errors</li>    
+                        </ul>
+                        <p th:if="${#fields.hasErrors('name')}">Exercise name:</p>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('name')}" th:text="${err}">Errors</li>    
+                        </ul>
+                        <p th:if="${#fields.hasErrors('handout')}">Exercise handout:</p>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('handout')}" th:text="${err}">Errors</li>    
+                        </ul>
+                        <p th:if="${#fields.hasErrors('sqlModelSolution')}">SQL Model Solution (in combination with selected database):</p>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('sqlModelSolution')}" th:text="${err}">Errors</li>    
+                        </ul>
+                    </div>
+
+
+                    <h3>1. Select a database</h3>
+
+                    <p>
+                        You have currently <span th:text="${databases.size()}">0</span> databases to choose from. You can view the data and tables in the database by clicking the View-link next to the database name. This will open a new window (or a tab), in which you can study the details of the database.
+                    </p>
+
+                    <p>
+                        Select one below -- the database is selected by clicking the database name (or the radio button).
+                    </p>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell--12-col">
+                        <ul>
+                            <li class="mdl-list__item" th:each="database: ${databases}">
+                                <span class="mdl-list__item-primary-content">
+                                    <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" th:for="${'list-option-' + database.id}">
+                                        <span th:text="${database.name}">Database name</span> &nbsp; <a th:href="@{/databases/{databaseId}(databaseId=${database.id})}" target="_blank">(View)</a>
+                                        <input type="radio" th:id="${'list-option-' + database.id}" class="mdl-radio__button" name="databaseId" th:value="${database.id}" th:checked="${database.id == exercise.databaseId} ? 'checked'" />
+                                    </label>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div th:if="${topicId == null}">
+
+                        <p><strong>Select topic</strong></p>
+
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell--12-col">
+                            <ul>
+                                <li class="mdl-list__item" th:each="topic: ${topics}">
+                                    <span class="mdl-list__item-primary-content">
+                                        <i class="material-icons  mdl-list__item-avatar">dns</i>
+                                        <span th:text="${topic.name}">Database name</span>
+                                    </span>
+                                    <span class="mdl-list__item-secondary-action">
+                                        <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" th:for="${'list-option-' + topic.id}">
+                                            <input type="radio" th:id="${'list-option-' + topic.id}" class="mdl-radio__button" name="topicId" th:value="${topic.id}" th:checked="${topic.id == exercise.topicId} ? 'checked'" />
+                                        </label>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div th:if="${topicId != null}">
+                        <input type="hidden" name="topicId" th:value="${topicId}"></input>
+                    </div>
+
+                    <h3>2. Enter exercise name</h3>
+                    <p>
+                        Come up with a (witty) name for the exercise that you are currently generating and type it below. The exercise name should contain at least 8 characters.
+                    </p>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell--12-col">
+                        <input type="text" class="mdl-textfield__input" th:field="*{name}">
+                        <label class="mdl-textfield__label" for="name">Exercise name</label>
+                    </div>
+
+                    <h3>3. Write a handout for the exercise</h3>
+                    <p>
+                        The handout should tell what the student who is working on the exercise should do, and if possibly, also disclose some details about the expected output.  The exercise handout should contain at least 16 characters. Write the handout below. 
+                    </p>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell--12-col">
+                        <textarea class="mdl-textfield__input" type="text" rows="4" th:field="*{handout}"></textarea>
+                        <label class="mdl-textfield__label" for="handout">Exercise handout</label>
+                    </div>
+
+                    <h3>4. Enter model solution</h3>
+                    <p>
+                        Model solution is written as a SQL query, which should perform the task outlined in the exercise handout. Write the model solution below.
+                    </p>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell--12-col">
+                        <textarea class="mdl-textfield__input" type="text" rows="12" th:field="*{sqlModelSolution}" onkeydown="tab(this, event);"></textarea>
+                        <label class="mdl-textfield__label" for="sqlModelSolution">SQL Model Solution (CREATE TABLE, INSERT -statements, or SELECT-statements)</label>
+                    </div>
+
+
+                    <div th:if="${queryResultTable != null}">
+                        <h3><em>Expected output</em></h3>
+                        <p>
+                            In the exercise that you are creating, the students are expected to write a SQL query that will produce the following result. Verify that the query matches your expectations and your handout. Only the output of the very last SQL statement is shown -- if there are multiple SQL statements, all of them will be executed in the database though. 
+                        </p>
+
+                        <div th:if="${queryResultTable.headers == null || queryResultTable.headers.isEmpty()}">
+                            <p>
+                                <strong>
+                                    There is no output in the current exercise. This could be due to no SQL being written, or due to the SQL statements altering the schema or dropping data from the database.
+                                </strong>
+                            </p>
+                        </div>
+
+                        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" th:if="${queryResultTable.headers != null && !queryResultTable.headers.isEmpty()}">
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric" th:each="header: ${queryResultTable.headers}" th:text="${header}">header</th>
+                            </tr>
+                            <tr th:each="rowMap: ${queryResultTable.data}">
+                                <td class="mdl-data-table__cell--non-numeric" th:each="header: ${queryResultTable.headers}" th:text="${rowMap.get(header)}">content</td>
+                            </tr>
+                        </table>
+
+                        <p>
+                            Once you are satisfied that your exercise is complete and the output is as expected, check the box below, and click the "Add"-button once more.
+                        </p>
+
+                        <input type="checkbox" name="exerciseVerified" id="exercise-verified" /><label for="exercise-verified">The exercise that I have generated is complete and can be added to the pool of exercises.</label>
+
+                    </div>
+
+
+                    <h3>Add!</h3>
+
+                    <p>
+                        Once you click the add-button below, you are shown the expected output of your assignment. 
+                    </p>
+
+                    <input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" value="Add"></input>
+
+                </form>
+
+            </div>
+
+        </main>
+
+    </body>
+</html>

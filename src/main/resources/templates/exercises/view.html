@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html th:replace="~{general:: layout(~{::main})}">
+    <head>
+        <title>SQL-junailija</title>
+    </head>
+    <body>
+
+        <main class="mdl-layout__content content mdl-grid mdl-grid--no-spacing">
+
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <h2>Viewing exercise</h2>
+
+                <p><strong>Exercise name:</strong> <span th:text="${exercise.name}">name</span></p>
+
+                <p><strong>Exercise handout:</strong></p>
+
+                <p th:text="${exercise.handout}">
+                    exercise handout
+                </p>
+
+                <p><strong>Exercise model solution:</strong></p>
+
+                <pre th:text="${exercise.sqlModelSolution}">
+                    sql init statements
+                </pre>
+            </div>
+        </main>
+
+    </body>
+</html>

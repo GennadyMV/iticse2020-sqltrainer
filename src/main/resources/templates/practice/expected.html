@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html th:replace="~{general:: layout(~{::main})}">
+    <head>
+        <title>SQL-junailija</title>
+    </head>
+    <body>
+
+        <main class="content">
+
+
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                    <div class="mdl-tabs__tab-bar">
+                        <a href="#view-exercise" class="mdl-tabs__tab is-active">Exercise</a>
+                        <a href="#query-response" class="mdl-tabs__tab" th:if="${queryResultTable}">Expected response</a>
+                        <a href="#database-schema" class="mdl-tabs__tab" th:if="${schema}">Schema</a>
+                        <a href="#database-tables" class="mdl-tabs__tab" th:if="${tables}">All Data</a>
+                    </div>
+
+                    <div class="mdl-tabs__panel is-active" id="view-exercise">
+
+                        <h2>Viewing expected output</h2>
+
+                        <p><strong>Exercise name</strong>: <span th:text="${exercise.name}">name</span></p>
+
+                        <p><strong>Exercise handout</strong>:</p>
+
+                        <p th:text="${exercise.handout}">
+                            handout
+                        </p>
+
+                        <p>
+                            <strong>Database name:</strong> <span th:text="${exercise.database.name}">name</span><br/><a th:href="@{/databases/{databaseId}(databaseId=${exercise.database.id})}" target="_blank">View database description (by clicking this link).</a>
+                        </p>
+
+                    </div>
+
+                    <div class="mdl-tabs__panel" id="database-tables" th:if="${tables}">
+
+                        <div th:each="table: ${tables}">
+
+                            <p><strong>Table name:</strong> <span th:text="${table.name}">name</span></p>
+
+                            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                                <tr>
+                                    <th class="mdl-data-table__cell--non-numeric" th:each="header: ${table.headers}" th:text="${header}">header</th>
+                                </tr>
+                                <tr th:each="rowMap: ${table.data}">
+                                    <td class="mdl-data-table__cell--non-numeric" th:each="header: ${table.headers}" th:text="${rowMap.get(header)}">content</td>
+                                </tr>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mdl-tabs__panel" id="database-schema" th:if="${schema}">
+
+                        <p th:if="${schema}"><strong>Database schema:</strong></p>
+
+                        <ul th:if="${schema}">
+                            <li th:each="tableSchema: ${schema}" th:text="${tableSchema}"></li>
+                        </ul>
+
+                    </div>
+
+                    <div class="mdl-tabs__panel" id="query-response" th:if="${queryResultTable}">
+
+                        <h4>Viewing expected output from query (assuming the last query is "SELECT ...").</h4>
+
+                        <p><strong>Table name:</strong> <span th:text="${queryResultTable.name}">name</span></p>
+
+                        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric" th:each="header: ${queryResultTable.headers}" th:text="${header}">header</th>
+                            </tr>
+                            <tr th:each="rowMap: ${queryResultTable.data}">
+                                <td class="mdl-data-table__cell--non-numeric" th:each="header: ${queryResultTable.headers}" th:text="${rowMap.get(header)}">content</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </body>
+</html>

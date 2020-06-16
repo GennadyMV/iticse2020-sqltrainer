@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html th:replace="~{general:: layout(~{::main})}">
+    <head>
+        <title>SQL-junailija</title>
+    </head>
+    <body>
+
+        <main class="content">
+
+
+            <div class="mdl-cell mdl-cell--12-col ">
+                <div class="mdl-cell mdl-cell--6-col mdl-card__supporting-text no-padding">
+                    <p>
+                        Here are the topics that are currently available for practice. By clicking the "START PRACTICE!"-button, you will be redirected to practice tasks.
+                    </p>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-card__supporting-text no-padding" th:if="${message}">
+                    <p>
+                        <strong th:text="${message}"></strong>
+                    </p>
+                </div>
+                
+            </div>
+
+            <div th:each="topic: ${topics}" class="mdl-card mdl-shadow--2dp" style="padding: 14px; margin: 14px;">
+                <div class="mdl-card__title">
+                    <h2 th:text="${topic.name}" class="mdl-card__title-text">Topic name</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <span th:text="${topic.description}">Topic description</span><br/><br/>
+                    Completed: <span th:text="${completed.get(topic.id)}"></span><br/>
+                    Created: <span th:text="${created.get(topic.id)}"></span>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <a th:href="@{/practice/topics/{topicId}/exercises/next(topicId=${topic.id})}"  class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                        Start practice!
+                    </a>
+                    <a th:href="@{/exercises/add/topics/{topicId}(topicId=${topic.id})}"  class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                        Create new content!
+                    </a>
+                </div>
+            </div>
+
+        </main>
+    </body>
+</html>

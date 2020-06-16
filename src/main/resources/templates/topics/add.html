@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html th:replace="~{general:: layout(~{::main})}">
+    <head>
+        <title>SQL-junailija</title>
+    </head>
+    <body>
+
+        <main class="mdl-layout__content content mdl-grid mdl-grid--no-spacing">
+
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <h2>Add a new topic</h2>
+
+                <p>
+                    Guidelines..
+                </p>
+
+                <form method="POST" th:action="@{/topics}" th:object="${topic}">
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                        <p>
+                            <strong>
+                                There are errors in the form that needs to be fixed...
+                            </strong>
+                        </p>
+                        <p th:if="${#fields.hasErrors('name')}">Topic name:</p>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('name')}" th:text="${err}">Errors</li>    
+                        </ul>
+                        <p th:if="${#fields.hasErrors('description')}">Topic description:</p>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('description')}" th:text="${err}">Errors</li>    
+                        </ul>
+                    </div>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell--12-col">
+                        <input type="text" class="mdl-textfield__input" th:field="*{name}">
+                        <label class="mdl-textfield__label" for="name">Topic name</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell--12-col">
+                        <textarea class="mdl-textfield__input" type="text" rows="4" th:field="*{description}"></textarea>
+                        <label class="mdl-textfield__label" for="description">Topic description</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell--12-col">
+                        <input class="mdl-textfield__input" type="number" th:field="*{rank}"></input>
+                        <label class="mdl-textfield__label" for="rank">Topic rank</label>
+                    </div>
+
+                    <input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" value="Add!"></input>
+
+                </form>
+
+            </div>
+
+        </main>
+
+    </body>
+</html>

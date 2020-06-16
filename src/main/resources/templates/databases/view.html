@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html th:replace="~{general:: layout(~{::main})}">
+    <head>
+        <title>SQL-junailija</title>
+    </head>
+    <body>
+
+        <main class="mdl-layout__content content mdl-grid mdl-grid--no-spacing">
+
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                    <div class="mdl-tabs__tab-bar">
+                        <a href="#view-database" class="mdl-tabs__tab is-active">Database</a>
+                        <a href="#database-tables" class="mdl-tabs__tab">Tables</a>
+                        <a href="#database-schema" class="mdl-tabs__tab">Schema</a>
+                        <a href="#sql-statements" class="mdl-tabs__tab">SQL Statements</a>
+                    </div>
+
+                    <div class="mdl-tabs__panel is-active" id="view-database">
+                        <h2>Viewing database</h2>
+
+                        <p><strong>Database name:</strong> <span th:text="${database.name}">name</span></p>
+
+                        <p><strong>Database description:</strong></p>
+
+                        <p th:text="${database.description}">
+                            database description
+                        </p>
+                        
+                    </div>
+
+                    <div class="mdl-tabs__panel" id="database-tables">
+
+                        <div th:each="table: ${tables}">
+
+                            <p><strong>Table name:</strong> <span th:text="${table.name}">name</span></p>
+
+                            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                                <tr>
+                                    <th class="mdl-data-table__cell--non-numeric" th:each="header: ${table.headers}" th:text="${header}">header</th>
+                                </tr>
+                                <tr th:each="rowMap: ${table.data}">
+                                    <td class="mdl-data-table__cell--non-numeric" th:each="header: ${table.headers}" th:text="${rowMap.get(header)}">content</td>
+                                </tr>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mdl-tabs__panel" id="database-schema">
+                        <p th:if="${schema}"><strong>Database schema:</strong></p>
+
+                        <ul th:if="${schema}">
+                            <li th:each="tableSchema: ${schema}" th:text="${tableSchema}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="mdl-tabs__panel" id="sql-statements">
+
+                        <p><strong>Database init statements:</strong></p>
+
+                        <pre th:text="${database.sqlInitStatements}">
+                    sql init statements
+                        </pre>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </main>
+
+    </body>
+</html>

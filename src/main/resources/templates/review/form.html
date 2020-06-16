@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html th:replace="~{general:: layout(~{::main})}">
+    <head>
+        <title>SQL-junailija</title>
+    </head>
+    <body>
+
+        <main class="mdl-layout__content content mdl-grid mdl-grid--no-spacing">
+
+            <div class="mdl-cell--12-col">
+
+                <h2 th:if="${attempt.correct}">Correct!</h2>
+
+
+                <h3>Exercise handout</h3>
+
+                <p th:text="${attempt.exercise.handout}">
+                    handout
+                </p>
+
+                <p>
+                    <a th:href="@{/databases/{databaseId}(databaseId=${attempt.exercise.database.id})}" target="_blank">View database description (by clicking this link).</a>
+                </p>
+
+
+                <h3>Your solution</h3>
+
+                <p th:text="${attempt.sqlCommands}">
+                    handout
+                </p>
+
+
+                <div th:if="${queryResultTable != null}">
+                    <p><strong>Output</strong></p>
+
+                    <div th:if="${queryResultTable.headers == null || queryResultTable.headers.isEmpty()}">
+                        <p>
+                            <strong>
+                                There was no output. This could be due to no SQL being written, or due to the SQL statements altering the schema or dropping data from the database.
+                            </strong>
+                        </p>
+                    </div>
+
+                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" th:if="${queryResultTable.headers != null && !queryResultTable.headers.isEmpty()}">
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric" th:each="header: ${queryResultTable.headers}" th:text="${header}">header</th>
+                        </tr>
+                        <tr th:each="rowMap: ${queryResultTable.data}">
+                            <td class="mdl-data-table__cell--non-numeric" th:each="header: ${queryResultTable.headers}" th:text="${rowMap.get(header)}">content</td>
+                        </tr>
+                    </table>
+
+                </div>
+
+
+                <h3>Expected solution</h3>
+
+
+                <p th:text="${attempt.exercise.sqlModelSolution}">
+                    handout
+                </p>
+
+                <h3>Review</h3>
+
+                <p>
+                    Review the exercise and your solution using the following review form. Once you have reviewed the exercise, you will be redirected to the next exercise.
+                </p>
+
+                <form method="POST" th:action="@{/review/attempts/{attemptId}(attemptId=${attempt.id})}">
+
+                    <table class="table">
+                        <tr>
+                            <th>
+                                Question
+                            </th>
+                            <th>
+                                1 = Not at all
+                            </th>
+                            <th>
+                                2
+                            </th>
+                            <th>
+                                3
+                            </th>
+                            <th>
+                                4
+                            </th>
+                            <th>
+                                5
+                            </th>
+                            <th>
+                                6
+                            </th>
+                            <th>
+                                7 = Very much so
+                            </th>
+                        </tr>
+                        <tr th:each="question: ${questions}">
+                            <td th:text="${question.value}">Question text</td>
+
+                            <td th:each="i: ${#numbers.sequence(1, 7)}" style="text-align: center;">
+                                <label class = "mdl-radio mdl-js-radio" th:for="${question.key + '-' + i}">
+                                    <input type="radio" th:id="${question.key + '-' + i}" th:name="${question.key}" class="mdl-radio__button" th:value="${i}">
+                                    <span class="mdl-radio__label" th:text="${i}">Number</span>
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" value="Add review!"></input>
+
+                </form>
+
+                <p>
+                    You can also skip the review and go to the next task by clicking <a th:href="@{/practice/topics/{topicId}/exercises/next(topicId=${attempt.exercise.topic.id})}">here</a>.
+                </p>
+
+            </div>
+
+
+        </main>
+
+    </body>
+</html>

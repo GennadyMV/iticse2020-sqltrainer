@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html th:replace="~{general:: layout(~{::main})}">
+    <head>
+        <title>SQL-junailija</title>
+    </head>
+    <body>
+
+        <main class="content">
+
+            <div class="mdl-cell mdl-cell--12-col mdl-card">
+
+                <div class="mdl-grid">
+                    <h3 class="mdl-cell mdl-cell--12-col mdl-typography--headline">Welcome!</h3>
+                    <div class="mdl-cell mdl-cell--6-col mdl-card__supporting-text no-padding">
+                        <p>
+                            SQL-Trainer is an online tool that you can use to practice SQL-commands.
+                        </p>
+                        <p>
+                            Get started by clicking <a th:href="@{/practice}">Practice</a>.
+                        </p>
+                        <p>
+                            The tool is open source. It is developed by the <a href="https://www.helsinki.fi/en/researchgroups/data-driven-education" target="_blank">Agile Education Research Team</a>.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+    </body>
+</html>

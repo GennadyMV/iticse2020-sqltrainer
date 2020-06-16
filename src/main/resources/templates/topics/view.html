@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html th:replace="~{general:: layout(~{::main})}">
+    <head>
+        <title>SQL-junailija</title>
+    </head>
+    <body>
+
+        <main class="mdl-layout__content content mdl-grid mdl-grid--no-spacing">
+
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <h2>Viewing topic</h2>
+
+                <p><strong>Topic name:</strong> <span th:text="${topic.name}">name</span></p>
+
+                <p><strong>Topic description:</strong></p>
+
+                <p th:text="${topic.description}">
+                    database description
+                </p>
+
+                <p>
+                    TODO: option for adding keywords into topic?
+                </p>
+                
+                <p>
+                    TODO: option for adding exercises into topic?
+                </p>
+
+                <p><strong>Topic rank:</strong> <span th:text="${topic.rank}">rank</span></p>
+
+            </div>
+
+        </main>
+
+    </body>
+</html>

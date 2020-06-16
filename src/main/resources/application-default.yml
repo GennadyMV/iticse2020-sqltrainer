@@ -1,0 +1,13 @@
+security:
+  oauth2:
+    client:
+      client: XXX
+      clientId: XXX
+      clientSecret: XXX
+      accessTokenUri: XXX
+      userAuthorizationUri: XXX
+      tokenName: XXX
+      clientAuthenticationScheme: XXX
+    resource:
+      userInfoUri: XXX
+      preferTokenInfo: XXX
